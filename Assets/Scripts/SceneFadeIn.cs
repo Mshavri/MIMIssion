@@ -6,7 +6,7 @@ public class SceneFadeIn : MonoBehaviour
 {
     public Image fadeImage;         // صورة الفيد
     public float fadeDuration = 1f; // مدة الفيد (ثواني)
-    public float startDelay = 0.2f; // تأخير قبل بدء الفيد (اختياري)
+    public float startDelay = 1f; // تأخير قبل بدء الفيد (اختياري)
 
     void Start()
     {
