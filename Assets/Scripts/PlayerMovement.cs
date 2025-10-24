@@ -14,12 +14,14 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
+        movement.y = Input.GetAxisRaw("Vertical"); // ✅ رجعناها بدون السالب
     }
 
     void FixedUpdate()
     {
         if (rb != null)
-            rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+        {
+            rb.velocity = movement.normalized * speed;
+        }
     }
 }
