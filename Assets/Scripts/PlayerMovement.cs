@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public Animator anim;
+
     public float moveSpeed;
 
     private Rigidbody2D rb;
@@ -12,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private float y;
 
     private Vector2 input;
+    private bool moving;
 
     private void Start()
     {
@@ -21,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         GetInput();
+        Animate();
     }
 
     private void FixedUpdate()
@@ -35,5 +39,25 @@ public class PlayerMovement : MonoBehaviour
 
         input = new Vector2(x, y);
         input.Normalize();
+    }
+
+    private void Animate()
+    {
+        if (input.magnitude > 0.1f || input.magnitude < -0.1f)
+        {
+            moving = true;
+        }
+        else
+        {
+            moving = false;
+        }
+
+        if (moving)
+        {
+            anim.SetFloat("X", x);
+            anim.SetFloat("Y", y);
+        }
+
+        anim.SetBool("Moving", moving);
     }
 }
