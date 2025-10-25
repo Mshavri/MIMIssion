@@ -1,27 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 3f;
-    private Rigidbody2D rb;
-    private Vector2 movement;
+    public float moveSpeed;
 
-    void Start()
+    private Rigidbody2D rb;
+
+    private float x;
+    private float y;
+
+    private Vector2 input;
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical"); // ✅ رجعناها بدون السالب
+        GetInput();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (rb != null)
-        {
-            rb.velocity = movement.normalized * speed;
-        }
+        rb.velocity = input * moveSpeed;
+    }
+
+    private void GetInput()
+    {
+        x = Input.GetAxisRaw("Horizontal");
+        y = Input.GetAxisRaw("Vertical");
+
+        input = new Vector2(x, y);
+        input.Normalize();
     }
 }
