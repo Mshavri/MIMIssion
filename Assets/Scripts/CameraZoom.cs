@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraZoomToPlayer : MonoBehaviour
+public class CameraZoom : MonoBehaviour
 {
     public Transform player;        // اللاعب اللي بنزوم عليه
     public float targetZoom = 5f;   // الزوم اللي نبي نوصل له
