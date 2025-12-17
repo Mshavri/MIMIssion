@@ -3,57 +3,91 @@ using TMPro;
 
 public class DadPuzzle : MonoBehaviour
 {
+    [Header("UI Elements")]
+    public GameObject scrambledText;
+    public GameObject clearText;
     public TMP_InputField answerInput;
     public GameObject submitButton;
-    public string correctAnswer = "secret";
 
-    private bool puzzleSolved = false;
+    [Header("Settings")]
+    public string correctAnswer = "10";
+    public bool hasHeadphones = false;
+    
+    // متغير جديد لتذكر حالة الحل
+    private bool isSolved = false;
 
-    void Start()
+    void OnEnable()
     {
-        if (answerInput != null)
-            answerInput.gameObject.SetActive(false);
-
-        if (submitButton != null)
-            submitButton.SetActive(false);
+        UpdateUIState();
     }
 
     public void ShowInput()
     {
-        if (puzzleSolved)
-            return;
+        PlayerGotHeadphones();
+    }
 
-        answerInput.gameObject.SetActive(true);
-        submitButton.SetActive(true);
+    public void PlayerGotHeadphones()
+    {
+        hasHeadphones = true;
+        if (gameObject.activeInHierarchy)
+        {
+            UpdateUIState();
+        }
+    }
 
-        answerInput.text = "";
-        answerInput.ActivateInputField();
+    void UpdateUIState()
+    {
+        // إذا كان اللغز محلولاً، نخفي خانات الإجابة
+        if (isSolved)
+        {
+            if (scrambledText != null) scrambledText.SetActive(false);
+            if (clearText != null) clearText.SetActive(true);
+            
+            if (answerInput != null) answerInput.gameObject.SetActive(false);
+            if (submitButton != null) submitButton.SetActive(false);
+            
+            return; 
+        }
+
+        // إذا لم يكن محلولاً ومعه سماعة
+        if (hasHeadphones)
+        {
+            if (scrambledText != null) scrambledText.SetActive(false);
+            if (clearText != null) clearText.SetActive(true);
+            
+            if (answerInput != null) answerInput.gameObject.SetActive(true);
+            if (submitButton != null) submitButton.SetActive(true);
+        }
+        // إذا لم يكن معه سماعة
+        else
+        {
+            if (scrambledText != null) scrambledText.SetActive(true);
+            if (clearText != null) clearText.SetActive(false);
+            
+            if (answerInput != null) answerInput.gameObject.SetActive(false);
+            if (submitButton != null) submitButton.SetActive(false);
+        }
     }
 
     public void CheckAnswer()
     {
-        if (puzzleSolved)
-            return;
-
-        string playerAnswer = answerInput.text.Trim().ToLower();
-        string correct = correctAnswer.Trim().ToLower();
-
-        if (playerAnswer == correct)
+        if (answerInput.text.Trim() == correctAnswer)
         {
-            puzzleSolved = true;
-
-            if (TraitManager.Instance != null)
+            // نتأكد أنه لم يتم الحل سابقاً قبل إعطاء الجائزة
+            if (!isSolved)
             {
-                TraitManager.Instance.AddTrait();
+                if (TraitManager.Instance != null)
+                {
+                    TraitManager.Instance.AddTrait();
+                }
+                isSolved = true; // نحدد أن اللغز تم حله
             }
 
-            answerInput.gameObject.SetActive(false);
-            submitButton.SetActive(false);
+            gameObject.SetActive(false);
         }
         else
         {
             answerInput.text = "";
-            answerInput.ActivateInputField();
         }
     }
 }

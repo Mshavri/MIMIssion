@@ -2,40 +2,34 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    private bool collected = false;
-    private bool isPlayerNearby = false;
+    public DadPuzzle dadPuzzle;
+    private bool isPlayerInRange = false;
 
     void Update()
     {
-        if (isPlayerNearby && Input.GetKeyDown(KeyCode.Space))
+        if (isPlayerInRange && Input.GetKeyDown(KeyCode.Space))
         {
-            Collect();
+            if (dadPuzzle != null)
+            {
+                dadPuzzle.PlayerGotHeadphones();
+            }
+            gameObject.SetActive(false);
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player") && !collected)
-        {
-            isPlayerNearby = true;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            isPlayerNearby = false;
+            isPlayerInRange = true;
         }
     }
 
-    void Collect()
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (!collected)
+        if (other.CompareTag("Player"))
         {
-            collected = true;
-            FindObjectOfType<NpcInteraction>().CollectItem();
-            gameObject.SetActive(false);
+            isPlayerInRange = false;
         }
     }
 }

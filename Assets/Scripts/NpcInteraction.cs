@@ -2,74 +2,79 @@ using UnityEngine;
 
 public class NpcInteraction : MonoBehaviour
 {
+    [Header("UI Components")]
     public GameObject dialogueBox;
     public GameObject scrambledText;
     public GameObject clearText;
+    public DadPuzzle dadPuzzle;
 
-    public DadPuzzle dadPuzzle;  // مرجع للسكربت الجديد
-
-    private bool playerNearby = false;
-    private bool hasItem = false;
+    private bool playerInRange;
 
     void Start()
     {
-        scrambledText.SetActive(true);
-        clearText.SetActive(false);
+        // هذه الرسالة ستظهر في الكونسول إذا كان الكود الجديد يعمل
+        Debug.Log(">>> الكود الجديد يعمل الآن! <<<");
 
-        if (dadPuzzle != null)
+        if (dialogueBox != null)
         {
-            dadPuzzle.answerInput.gameObject.SetActive(false);
-            dadPuzzle.submitButton.SetActive(false);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-            playerNearby = true;
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerNearby = false;
             dialogueBox.SetActive(false);
+        }
+
+        // الحماية الثلاثية: هل المتغير موجود؟
+        if (scrambledText != null)
+        {
+            scrambledText.SetActive(true);
+        }
+        else
+        {
+            // هذا السطر يمنع الخطأ ويخبرنا أن الخانة فارغة بشكل آمن
+             Debug.Log("تنبيه: لا يوجد نص مشفر (هذا طبيعي للأب)");
+        }
+
+        if (clearText != null)
+        {
+            clearText.SetActive(false);
         }
     }
 
     void Update()
     {
-        if (playerNearby && Input.GetKeyDown(KeyCode.Space))
+        if (playerInRange && Input.GetKeyDown(KeyCode.Space))
         {
-            dialogueBox.SetActive(!dialogueBox.activeSelf);
-
-            if (hasItem)
+            if (dialogueBox.activeInHierarchy)
             {
-                scrambledText.SetActive(false);
-                clearText.SetActive(true);
-
-                if (dialogueBox.activeSelf && dadPuzzle != null)
-                {
-                    dadPuzzle.ShowInput();
-                }
+                dialogueBox.SetActive(false);
             }
             else
             {
-                scrambledText.SetActive(true);
-                clearText.SetActive(false);
+                dialogueBox.SetActive(true);
 
-                if (dadPuzzle != null)
+                if (dadPuzzle == null)
                 {
-                    dadPuzzle.answerInput.gameObject.SetActive(false);
-                    dadPuzzle.submitButton.SetActive(false);
+                    if (scrambledText != null) scrambledText.SetActive(true);
+                    if (clearText != null) clearText.SetActive(false);
                 }
             }
         }
     }
 
-    public void CollectItem()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        hasItem = true;
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+            if (dialogueBox != null)
+            {
+                dialogueBox.SetActive(false);
+            }
+        }
     }
 }

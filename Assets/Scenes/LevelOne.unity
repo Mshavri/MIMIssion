@@ -1794,7 +1794,6 @@ GameObject:
   - component: {fileID: 512826604}
   - component: {fileID: 512826608}
   - component: {fileID: 512826609}
-  - component: {fileID: 512826610}
   m_Layer: 0
   m_Name: Father (NPC)
   m_TagString: Untagged
@@ -1943,24 +1942,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueBox: {fileID: 1666931754}
-  scrambledText: {fileID: 813410823}
-  clearText: {fileID: 1334625461}
-  dadPuzzle: {fileID: 0}
---- !u!114 &512826610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512826603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64926dc151c304944a6eb370e7d18184, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  answerInput: {fileID: 1040503991}
-  submitButton: {fileID: 979459337}
-  correctAnswer: 9
+  scrambledText: {fileID: 0}
+  clearText: {fileID: 0}
+  dadPuzzle: {fileID: 1666931758}
 --- !u!1 &534006244
 GameObject:
   m_ObjectHideFlags: 0
@@ -4387,7 +4371,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 512826610}
+      - m_Target: {fileID: 1666931758}
         m_TargetAssemblyTypeName: DadPuzzle, Assembly-CSharp
         m_MethodName: CheckAnswer
         m_Mode: 1
@@ -9835,11 +9819,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'help me to
-
-    find my
-
-    controller!'
+  m_text: 5 - 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fcf9047a4929f7c438b99ef1e439057a, type: 2}
   m_sharedMaterial: {fileID: -8691452100079993091, guid: fcf9047a4929f7c438b99ef1e439057a, type: 2}
@@ -10826,6 +10806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6088d0cb910972a4e9e66d407651cc4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dadPuzzle: {fileID: 1666931758}
 --- !u!61 &1613884143
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11119,6 +11100,7 @@ GameObject:
   - component: {fileID: 1666931755}
   - component: {fileID: 1666931757}
   - component: {fileID: 1666931756}
+  - component: {fileID: 1666931758}
   m_Layer: 0
   m_Name: conv
   m_TagString: Untagged
@@ -11187,6 +11169,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666931754}
   m_CullTransparentMesh: 1
+--- !u!114 &1666931758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666931754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64926dc151c304944a6eb370e7d18184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrambledText: {fileID: 813410823}
+  clearText: {fileID: 1334625461}
+  answerInput: {fileID: 1040503991}
+  submitButton: {fileID: 979459337}
+  correctAnswer: 2
+  hasHeadphones: 0
 --- !u!1 &1685580737
 GameObject:
   m_ObjectHideFlags: 0
