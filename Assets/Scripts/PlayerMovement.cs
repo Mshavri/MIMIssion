@@ -1,55 +1,55 @@
 using UnityEngine;
 
-// سكربت بسيط لتحريك اللاعب وربط الحركة بالأنميشن
+// Simple player movement script with animation control
 public class PlayerMovement : MonoBehaviour
 {
-    public Animator anim;      // الأنميتر المرتبط بالشخصية
-    public float moveSpeed;    // سرعة الحركة
+    public Animator anim;      // Animator linked to the character
+    public float moveSpeed;    // Movement speed
 
-    private Rigidbody2D rb;    // الفيزياء (الحركة الفعلية)
-    private Vector2 input;     // اتجاه الحركة
-    private bool moving;       // هل اللاعب يتحرك ولا واقف
+    private Rigidbody2D rb;    // Physics component
+    private Vector2 input;     // Movement direction
+    private bool moving;       // Movement state
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>(); // نجيب الـ Rigidbody2D من نفس الأوبجكت
+        rb = GetComponent<Rigidbody2D>(); // Get Rigidbody2D from this object
     }
 
     private void Update()
     {
-        GetInput();  // نقرأ الأزرار
-        Animate();   // نحدث الأنميشن
+        GetInput();   // Read player input
+        Animate();    // Update animations
     }
 
     private void FixedUpdate()
     {
-        // نحرك اللاعب بالفيزياء بناءً على الاتجاه والسرعة
+        // Move player using physics
         rb.velocity = input * moveSpeed;
     }
 
     private void GetInput()
     {
-        // نقرأ المحاور من الكيبورد (يمين يسار فوق تحت)
+        // Read keyboard input
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
-        // نخزن الاتجاه ونطبّع طوله (عشان ما تكون السرعة أقوى بالقطر)
+        // Normalize direction to keep speed consistent
         input = new Vector2(x, y).normalized;
     }
 
     private void Animate()
     {
-        // إذا فيه حركة نعتبر اللاعب يتحرك
+        // Check if player is moving
         moving = input.sqrMagnitude > 0.01f;
 
-        // نرسل الاتجاه للأنميتر لما يكون اللاعب يتحرك
+        // Send direction to animator while moving
         if (moving)
         {
             anim.SetFloat("X", input.x);
             anim.SetFloat("Y", input.y);
         }
 
-        // نرسل حالة الحركة (واقِف / يمشي)
+        // Send movement state to animator
         anim.SetBool("Moving", moving);
     }
 }

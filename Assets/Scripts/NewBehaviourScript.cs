@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    // هذه الدالة ستقوم بنقلك لمشهد First مباشرة
+    // Loads the First scene
     public void RestartGame()
     {
         SceneManager.LoadScene("First");

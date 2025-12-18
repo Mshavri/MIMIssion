@@ -5,24 +5,24 @@ public class MenuMusic : MonoBehaviour
 {
     private static MenuMusic instance;
     private AudioSource audioSource;
-    private float targetVolume;     // المستوى اللي بننتقل له
-    private float originalVolume;   // نحفظ فيه الصوت الأصلي
-    public float fadeSpeed = 0.5f;  // سرعة الفيد (ثابتة مثل ما تبي)
+    private float targetVolume;     // Target volume level
+    private float originalVolume;   // Stored original volume
+    public float fadeSpeed = 0.5f;  // Fade speed
 
     void Awake()
     {
-        // نتأكد ان فيه نسخه وحده من الصوت بكل اللعبه
+        // Ensure only one music instance exists
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
             audioSource = GetComponent<AudioSource>();
 
-            // نحفظ الصوت اللي انت حاطه بالانسبكتور
+            // Store volume set in Inspector
             originalVolume = audioSource.volume;
             targetVolume = originalVolume;
 
-            // نسمع اذا تغير المشهد
+            // Listen for scene changes
             SceneManager.activeSceneChanged += OnSceneChanged;
         }
         else
@@ -33,25 +33,29 @@ public class MenuMusic : MonoBehaviour
 
     void OnDestroy()
     {
-        // نفصل الحدث لو الكائن انحذف
+        // Unsubscribe from scene change event
         SceneManager.activeSceneChanged -= OnSceneChanged;
     }
 
     void Update()
     {
-        // يخلي الصوت يتغير شوي شوي بدون ما يطلع فوق اللي حاطه انت
+        // Smooth volume transition
         if (audioSource != null && Mathf.Abs(audioSource.volume - targetVolume) > 0.01f)
         {
-            audioSource.volume = Mathf.MoveTowards(audioSource.volume, targetVolume, fadeSpeed * Time.deltaTime);
+            audioSource.volume = Mathf.MoveTowards(
+                audioSource.volume,
+                targetVolume,
+                fadeSpeed * Time.deltaTime
+            );
         }
     }
 
     void OnSceneChanged(Scene oldScene, Scene newScene)
     {
-        // اذا دخلت مشهد LevelOne ينقص الصوت للنص من اللي انت محدده
+        // Lower volume in LevelOne scene
         if (newScene.name == "LevelOne")
             targetVolume = originalVolume * 0.5f;
         else
-            targetVolume = originalVolume; // يرجع لنفس المستوى اللي كان عليه
+            targetVolume = originalVolume; // Restore original volume
     }
 }

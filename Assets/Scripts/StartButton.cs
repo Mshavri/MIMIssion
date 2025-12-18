@@ -2,40 +2,40 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-// سكربت بسيط لزر البداية: يشغل صوت، يسوي فيد، ويدخل للمشهد الجديد
+// Simple start button script with sound, fade, and scene load
 public class StartButton : MonoBehaviour
 {
-    public Button button;            // زر البداية
-    public Image fadeImage;          // صورة الفيد (التلاشي)
-    public AudioSource clickSound;   // صوت الضغط على الزر
-    public string sceneToLoad = "characterscene"; // اسم المشهد اللي بنروح له
-    public float fadeDuration = 1f;  // مدة الفيد بالثواني
+    public Button button;            // Start button
+    public Image fadeImage;          // Fade image
+    public AudioSource clickSound;   // Button click sound
+    public string sceneToLoad = "characterscene"; // Scene name
+    public float fadeDuration = 1f;  // Fade time in seconds
 
     void Start()
     {
-        // لو الزر ما تعين من الانسبكتر، نجيبه من نفس الأوبجكت
+        // Get Button component if not assigned
         if (button == null)
             button = GetComponent<Button>();
 
-        // نخلي الفيد شفاف بالبداية
+        // Start with transparent fade image
         if (fadeImage != null)
             fadeImage.color = new Color(0, 0, 0, 0);
 
-        // نخلي الزر يشغل دالة OnClick لما ينضغط
+        // Register click event
         button.onClick.AddListener(OnClick);
     }
 
     public void OnClick()
     {
-        // نشغل الصوت لو موجود
+        // Play click sound
         if (clickSound != null)
             clickSound.Play();
 
-        // نسوي الفيد وننتقل للمشهد الجديد
+        // Start fade and load scene
         if (fadeImage != null)
             StartCoroutine(FadeAndLoad());
         else
-            SceneManager.LoadScene(sceneToLoad); // لو ما فيه فيد، نحمل المشهد مباشرة
+            SceneManager.LoadScene(sceneToLoad); // Load directly if no fade
     }
 
     private System.Collections.IEnumerator FadeAndLoad()
@@ -43,16 +43,16 @@ public class StartButton : MonoBehaviour
         Color color = fadeImage.color;
         float t = 0f;
 
-        // نخلي الشاشة تصير سودة بالتدريج
+        // Fade screen to black
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
             color.a = Mathf.Lerp(0f, 1f, t / fadeDuration);
             fadeImage.color = color;
-            yield return null; // ننتظر فريم
+            yield return null;
         }
 
-        // بعد ما يصير الفيد كامل، نبدل للمشهد الجديد
+        // Load new scene after fade
         SceneManager.LoadScene(sceneToLoad);
     }
 }

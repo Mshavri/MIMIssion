@@ -2,23 +2,23 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// هذا السكربت يستخدم لما اللاعب يختار شخصية "Mimi"
+// Used when the player selects the Mimi character
 public class MimiSelect : MonoBehaviour
 {
-    public Image fadeImage;          // صورة الفيد (الأسود اللي يغطي الشاشة)
-    public float fadeDuration = 1f;  // كم ياخذ وقت الفيد
-    public string nextScene = "LevelOne"; // اسم المشهد اللي بننتقل له
+    public Image fadeImage;               // Fade image that covers the screen
+    public float fadeDuration = 1f;       // Fade time
+    public string nextScene = "LevelOne"; // Scene to load
 
     public void OnClickMimi()
     {
-        // نحفظ اسم الشخصية المختارة (لو بنحتاجها بعدين)
+        // Save selected character
         PlayerPrefs.SetString("SelectedCharacter", "Mimi");
 
-        // نسوي تلاشي وانتقال للمشهد الجديد
+        // Start fade and scene load
         if (fadeImage != null)
             StartCoroutine(FadeAndLoad());
         else
-            SceneManager.LoadScene(nextScene); // لو ما فيه فيد، نحمل المشهد مباشرة
+            SceneManager.LoadScene(nextScene); // Load directly if no fade
     }
 
     private System.Collections.IEnumerator FadeAndLoad()
@@ -26,7 +26,7 @@ public class MimiSelect : MonoBehaviour
         Color color = fadeImage.color;
         float t = 0f;
 
-        // نرفع الشفافية تدريجياً إلى أن تصير الشاشة سوداء بالكامل
+        // Increase alpha until screen is fully black
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
@@ -35,7 +35,7 @@ public class MimiSelect : MonoBehaviour
             yield return null;
         }
 
-        // بعد ما يصير الفيد كامل، ننتقل للمشهد التالي
+        // Load next scene after fade completes
         SceneManager.LoadScene(nextScene);
     }
 }

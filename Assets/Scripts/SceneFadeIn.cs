@@ -2,45 +2,45 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
-// سكربت يخلي الشاشة تسوي تلاشي من الأسود إلى الشفافية لما يبدأ المشهد
+// Fades the screen from black to transparent when the scene starts
 public class SceneFadeIn : MonoBehaviour
 {
-    public Image fadeImage;          // صورة الفيد (اللي تغطي الشاشة)
-    public float fadeDuration = 1f;  // كم ياخذ وقت التلاشي
-    public float startDelay = 1f;    // وقت انتظار قبل يبدأ الفيد (اختياري)
+    public Image fadeImage;          // Fade image covering the screen
+    public float fadeDuration = 1f;  // Fade time
+    public float startDelay = 1f;    // Optional delay before fade starts
 
     void Start()
     {
         if (fadeImage != null)
         {
-            // نخلي الشاشة سوداء بالبداية
+            // Start with a fully black screen
             Color color = fadeImage.color;
             color.a = 1f;
             fadeImage.color = color;
 
-            // نبدأ كروتين التلاشي
+            // Start fade coroutine
             StartCoroutine(FadeIn());
         }
     }
 
     IEnumerator FadeIn()
     {
-        // ننتظر شوي قبل يبدأ الفيد (لو فيه تأخير)
+        // Wait before starting the fade
         yield return new WaitForSeconds(startDelay);
 
         Color color = fadeImage.color;
         float t = 0f;
 
-        // نخفف السواد بالتدريج إلى أن تصير الشاشة شفافة تمامًا
+        // Gradually fade to transparent
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
             color.a = Mathf.Lerp(1f, 0f, t / fadeDuration);
             fadeImage.color = color;
-            yield return null; // نكمل بالفريم الجاي
+            yield return null;
         }
 
-        // نتأكد إن الشفافية وصلت للصفر
+        // Ensure alpha reaches zero
         color.a = 0f;
         fadeImage.color = color;
     }

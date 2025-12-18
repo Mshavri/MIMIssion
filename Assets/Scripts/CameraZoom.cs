@@ -2,47 +2,47 @@ using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    public Transform player;        // اللاعب اللي بنزوم عليه
-    public float targetZoom = 5f;   // الزوم اللي نبي نوصل له
-    public float zoomDuration = 2f; // كم ياخذ وقت الزوم (بالثواني)
-    public float followSpeed = 3f;  // سرعة متابعة اللاعب بعد الزوم
+    public Transform player;        // Player to zoom toward
+    public float targetZoom = 5f;   // Target zoom value
+    public float zoomDuration = 2f; // Zoom time in seconds
+    public float followSpeed = 3f;  // Camera follow speed after zoom
 
-    private Camera cam;             
-    private float zoomTimer;        // عداد الوقت للزوم
-    private bool zooming = true;    // هل الحين قاعد يزوم ولا خلص
-    private float startZoom;        // الزوم اللي بدأت فيه الكاميرا
-    private Vector3 startPos;       // موقع الكاميرا بالبداية
+    private Camera cam;
+    private float zoomTimer;        // Zoom timer
+    private bool zooming = true;    // Zoom state
+    private float startZoom;        // Initial zoom value
+    private Vector3 startPos;       // Initial camera position
 
     void Start()
     {
-        cam = GetComponent<Camera>();        // نجيب الكاميرا اللي على نفس الأوبجكت
-        startZoom = cam.orthographicSize;    // نخزن الزوم الحالي كبداية
-        startPos = transform.position;       // نخزن موقع الكاميرا الحالي
+        cam = GetComponent<Camera>();        // Get camera on this object
+        startZoom = cam.orthographicSize;    // Store initial zoom
+        startPos = transform.position;       // Store initial position
     }
 
     void LateUpdate()
     {
-        if (player == null) return; // لو اللاعب مو موجود، نطلع على طول
+        if (player == null) return; // Stop if player is missing
 
         if (zooming)
         {
-            zoomTimer += Time.deltaTime;               // نزيد العداد مع الوقت
-            float t = zoomTimer / zoomDuration;        // نحسب نسبة التقدم في الزوم (من 0 إلى 1)
+            zoomTimer += Time.deltaTime;
+            float t = zoomTimer / zoomDuration;
 
-            // نحرك الكاميرا باتجاه اللاعب بالتدريج
+            // Move camera toward player smoothly
             Vector3 targetPos = new Vector3(player.position.x, player.position.y, startPos.z);
             transform.position = Vector3.Lerp(startPos, targetPos, t);
 
-            // نغير الزوم بالتدريج من البداية للنهاية
+            // Smooth zoom transition
             cam.orthographicSize = Mathf.Lerp(startZoom, targetZoom, t);
 
-            // إذا خلص وقت الزوم نوقف
+            // End zoom when time finishes
             if (zoomTimer >= zoomDuration)
                 zooming = false;
         }
         else
         {
-            // بعد ما يخلص الزوم، الكاميرا تتابع اللاعب بسلاسة
+            // Follow player smoothly after zoom
             Vector3 followPos = new Vector3(player.position.x, player.position.y, transform.position.z);
             transform.position = Vector3.Lerp(transform.position, followPos, followSpeed * Time.deltaTime);
         }

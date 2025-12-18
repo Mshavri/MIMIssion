@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // السطر المضاف 1: للسماح بالانتقال بين المشاهد
+using UnityEngine.SceneManagement; // Allows scene switching
 
 public class TraitManager : MonoBehaviour
 {
@@ -33,10 +33,10 @@ public class TraitManager : MonoBehaviour
         UpdateTraitUI();
         PlayTraitSound();
 
-        // السطر المضاف 2: التحقق إذا وصل اللاعب للعدد المطلوب للانتقال
+        // Check if player reached the required amount
         if (currentTraits >= maxTraits)
         {
-            SceneManager.LoadScene("end"); // سينقلك للمشهد المسمى end
+            SceneManager.LoadScene("end"); // Load end scene
         }
     }
 
